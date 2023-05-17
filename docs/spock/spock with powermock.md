@@ -1,6 +1,6 @@
 # maven 配置
 
-```xml
+```xml showLineNumbers
     <properties>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
@@ -222,7 +222,7 @@
 
 ## 源文件 - Calculator.java
 
-```java
+```java showLineNumbers
 public class Calculator {
     public int add(int a, int b) {
         return a + b;
@@ -240,7 +240,7 @@ public class Calculator {
 
 ### 测试普通方法
 
-```groovy
+```groovy showLineNumbers
 class CalculatorTest extends Specification {
     def "Add"() {
         given:
@@ -268,7 +268,7 @@ class CalculatorTest extends Specification {
 
 ### 测试静态方法
 
-```groovy
+```groovy {3,7-8} showLineNumbers
 @RunWith(PowerMockRunner)
 @PowerMockRunnerDelegate(Sputnik)
 @PrepareForTest([Calculator])
