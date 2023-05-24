@@ -2,7 +2,6 @@ import pytest
 
 
 def f():
-    # 请求退出解释器
     raise SystemExit(1)
 
 

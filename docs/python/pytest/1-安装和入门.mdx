@@ -41,7 +41,7 @@ def test_answer():
 
 现在开始执行这个测试用例：
 
-```bash
+```python
 $ pytest src/chapter-1/test_sample.py
 =========================== test session starts ============================
 platform linux -- Python 3.x.y, pytest-7.x.y, pluggy-1.x.y
@@ -49,10 +49,8 @@ rootdir: /home/sweet/project
 collected 1 item
 
 test_sample.py F                                                     [100%]
-
 ================================= FAILURES =================================
 _______________________________ test_answer ________________________________
-
     def test_answer():
 >       assert inc(3) == 5
 E       assert 4 == 5
@@ -82,7 +80,6 @@ FAILED test_sample.py::test_answer - assert 4 == 5
 import pytest
 
 def f():
-    # 请求退出解释器
     raise SystemExit(1)
 
 def test_mytest():
@@ -90,22 +87,7 @@ def test_mytest():
         f()
 ```
 
-执行这个测试用例时，加上`-q`选项可以精简测试结果的输出：
-
-```bash
-$ pytest src/chapter-1/test_sysexit.py
-================================ test session starts =================================
-platform linux -- Python 3.x.y, pytest-7.x.y, pluggy-1.x.y
-rootdir: /home/sweet/project
-collected 1 item
-
-src/chapter-1/test_sysexit.py .                                                [100%]
-================================= 1 passed in 0.01s ==================================
-```
-
-:::info
-使用`-q/--quiet`命令行标记可以简化测试结果输出。
-:::
+执行这个测试用例时，加上`-q/--quiet`选项可以精简测试结果的输出：
 
 ```bash
 $ pytest -q test_sysexit.py
@@ -130,13 +112,13 @@ class TestClass:
 
 我们无需让测试类继承自任何基类，但是要确保类名的前缀为`Test`，否则将忽略其中的测试用例。通过传入文件路径就可以执行这个测试类：
 
-```bash
-$ pytest -q src/chapter-1/test_class.py
-.F                                                                             [100%]
-====================================== FAILURES ======================================
-_________________________________ TestClass.test_two _________________________________
+```python
+$ pytest -q test_class.py
+.F                                                                   [100%]
+================================= FAILURES =================================
+____________________________ TestClass.test_two ____________________________
 
-self = <test_class.TestClass object at 0x1046f7df0>
+self = <test_class.TestClass object at 0xdeadbeef0001>
 
     def test_two(self):
         x = "hello"
@@ -144,10 +126,10 @@ self = <test_class.TestClass object at 0x1046f7df0>
 E       AssertionError: assert False
 E        +  where False = hasattr('hello', 'check')
 
-src/chapter-1/test_class.py:8: AssertionError
-============================== short test summary info ===============================
-FAILED src/chapter-1/test_class.py::TestClass::test_two - AssertionError: assert False
-1 failed, 1 passed in 0.04s
+test_class.py:8: AssertionError
+========================= short test summary info ==========================
+FAILED test_class.py::TestClass::test_two - AssertionError: assert False
+1 failed, 1 passed in 0.12s
 ```
 
 从输出的结果中我们可以看到：
@@ -158,10 +140,18 @@ FAILED src/chapter-1/test_class.py::TestClass::test_two - AssertionError: assert
 :::caution
 测试类要符合特定的规则，pytest 才能发现它：
 
-    - 测试类的命名要符合`Test*`规则；
-    - 测试类中不能有`__init__()`方法，否则 pytest 无法采集到其中的测试用例；
-       - `PytestCollectionWarning: cannot collect test class 'TestClass' because it has a __init__ constructor.`
-
+<ul>
+  <li>测试类的命名要符合`Test*`规则；</li>
+  <li>
+    测试类中不能有`__init__()`方法，否则 pytest 无法采集到其中的测试用例；
+    <ul>
+      <li>
+        PytestCollectionWarning: cannot collect test class 'TestClass' because
+        it has a __init__ constructor.
+      </li>
+    </ul>
+  </li>
+</ul>
 :::
 
 在类中组织多个测试用例的好处体现以下几个方面：
