@@ -7,6 +7,8 @@
 # Generated files
 .docusaurus
 .cache-loader
+__pycache__
+.pytest_cache
 
 # Misc
 .DS_Store

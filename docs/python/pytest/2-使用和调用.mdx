@@ -1,6 +1,5 @@
 # 使用和调用
 
-
 ## 通过`python -m pytest`的方式执行测试
 
 我们可以在命令行中通过以下方式执行测试：
@@ -12,18 +11,16 @@ python -m pytest [...]
 不过这会将当前路径加入到`sys.path`中，除此之外它与`pytest [...]`的效果一样。
 
 !!! note
-	`python -m mod`表示将模块（`mod`）作为脚本来运行，但是模块中必须包含一个[`__main__.py`](https://docs.python.org/3/library/__main__.html)文件。
-	
-    pytest 的`__main__.py`文件内容如下：
-    
+`python -m mod`表示将模块（`mod`）作为脚本来运行，但是模块中必须包含一个[`__main__.py`](https://docs.python.org/3/library/__main__.html)文件。
+pytest 的`__main__.py`文件内容如下：
+
     ```python
     """The pytest entry point."""
     import pytest
-    
+
     if __name__ == "__main__":
     raise SystemExit(pytest.console_main())
     ```
-
 
 ## 测试结束时可能返回的状态码
 
@@ -43,7 +40,7 @@ from pytest import ExitCode
 ```
 
 !!! note
-	如果你想在某些场景下自定义返回的状态码，尤其是当未收集到任何测试用例时，可以考虑使用[pytest-custom_exit_code](https://github.com/yashtodi94/pytest-custom_exit_code)插件。
+如果你想在某些场景下自定义返回的状态码，尤其是当未收集到任何测试用例时，可以考虑使用[pytest-custom_exit_code](https://github.com/yashtodi94/pytest-custom_exit_code)插件。
 
 ## 获取帮助信息
 
@@ -121,73 +118,73 @@ class TestNodeid:
 
 - 指定**函数名**：
 
-    ```bash
-    $ pipenv run pytest src/chapter-2/test_nodeid.py::test_one --collect-only
-    ================================ test session starts =================================
-    platform darwin -- Python 3.8.4, pytest-6.1.1, py-1.9.0, pluggy-0.13.1
-    rootdir: /Users/yaomeng/Private/projects/pytest-chinese-doc
-    collected 1 item
+  ```bash
+  $ pipenv run pytest src/chapter-2/test_nodeid.py::test_one --collect-only
+  ================================ test session starts =================================
+  platform darwin -- Python 3.8.4, pytest-6.1.1, py-1.9.0, pluggy-0.13.1
+  rootdir: /Users/yaomeng/Private/projects/pytest-chinese-doc
+  collected 1 item
 
-    <Module src/chapter-2/test_nodeid.py>
-      <Function test_one>
+  <Module src/chapter-2/test_nodeid.py>
+    <Function test_one>
 
-    =============================== no tests ran in 0.01s ================================
-    ```
+  =============================== no tests ran in 0.01s ================================
+  ```
 
 - 指定**类名+函数名**：
 
-    ```bash
-    $ pipenv run pytest src/chapter-2/test_nodeid.py::TestNodeid::test_one --collect-only
-    ================================ test session starts =================================
-    platform darwin -- Python 3.8.4, pytest-6.1.1, py-1.9.0, pluggy-0.13.1
-    rootdir: /Users/yaomeng/Private/projects/pytest-chinese-doc
-    collected 1 item
+  ```bash
+  $ pipenv run pytest src/chapter-2/test_nodeid.py::TestNodeid::test_one --collect-only
+  ================================ test session starts =================================
+  platform darwin -- Python 3.8.4, pytest-6.1.1, py-1.9.0, pluggy-0.13.1
+  rootdir: /Users/yaomeng/Private/projects/pytest-chinese-doc
+  collected 1 item
 
-    <Module src/chapter-2/test_nodeid.py>
-      <Class TestNodeid>
-          <Function test_one>
+  <Module src/chapter-2/test_nodeid.py>
+    <Class TestNodeid>
+        <Function test_one>
 
-    =============================== no tests ran in 0.01s ================================
-    ```
+  =============================== no tests ran in 0.01s ================================
+  ```
 
 - 指定**由`parametrize`标记赋予的参数**：
 
-    ```bash
-    $ pipenv run pytest src/chapter-2/test_nodeid.py::TestNodeid::test_two[1-2] --collect-only
-    ================================ test session starts =================================
-    platform darwin -- Python 3.8.4, pytest-6.1.1, py-1.9.0, pluggy-0.13.1
-    rootdir: /Users/yaomeng/Private/projects/pytest-chinese-doc
-    collecting ... nodeid src/chapter-2/test_nodeid.py::TestNodeid::test_two[1-2]
-    collected 1 item
+  ```bash
+  $ pipenv run pytest src/chapter-2/test_nodeid.py::TestNodeid::test_two[1-2] --collect-only
+  ================================ test session starts =================================
+  platform darwin -- Python 3.8.4, pytest-6.1.1, py-1.9.0, pluggy-0.13.1
+  rootdir: /Users/yaomeng/Private/projects/pytest-chinese-doc
+  collecting ... nodeid src/chapter-2/test_nodeid.py::TestNodeid::test_two[1-2]
+  collected 1 item
 
-    <Module src/chapter-2/test_nodeid.py>
-    <Class TestNodeid>
-    <Function test_two[1-2]>
+  <Module src/chapter-2/test_nodeid.py>
+  <Class TestNodeid>
+  <Function test_two[1-2]>
 
-    =============================== no tests ran in 0.01s ================================
-    ```
+  =============================== no tests ran in 0.01s ================================
+  ```
 
-    这里指定参数`x`、`y`的形式是`[1-1]`，中间以`-`间隔，并且只能为`[1-1]`或者`[3-4]`。
-    
-    !!! attention
-        上述方式并未真正执行这些测试用例，只是通过`--collect-only`展示过滤后收集到的测试用例。
+  这里指定参数`x`、`y`的形式是`[1-1]`，中间以`-`间隔，并且只能为`[1-1]`或者`[3-4]`。
 
-    !!! note
-        我们也可以使用上面介绍的命令行选项`-k`达到同样的效果，例如：执行`test_nodeid.py::test_one`测试用例：
-	
+  !!! attention
+  上述方式并未真正执行这些测试用例，只是通过`--collect-only`展示过滤后收集到的测试用例。
+
+  !!! note
+  我们也可以使用上面介绍的命令行选项`-k`达到同样的效果，例如：执行`test_nodeid.py::test_one`测试用例：
+
         ```bash
         $ pipenv run pytest -k "test_one and not testnodeid" src/chapter-2/test_nodeid.py --collect-only
         ================================ test session starts =================================
         platform darwin -- Python 3.8.4, pytest-6.1.1, py-1.9.0, pluggy-0.13.1
         rootdir: /Users/yaomeng/Private/projects/pytest-chinese-doc
         collected 4 items / 3 deselected / 1 selected
-        
+
         <Module src/chapter-2/test_nodeid.py>
         <Function test_one>
-        
+
         =============================== 3 deselected in 0.01s ================================
         ```
-        
+
         这和上面的`pipenv run pytest src/chapter-2/test_nodeid.py::test_one --collect-only`效果是一样的。
 
 ### 执行指定标记的测试用例
@@ -426,31 +423,31 @@ python 3.7 开始新加了一个内置`breakpoint()`函数。pytest 支持以下
 - `--pdbcls`选项允许指定一个用户自定义的`PDB`类；
 
 !!! note
-    我们可以通过`--pdbcls=IPython.terminal.debugger:TerminalPdb`选项指定[ipython](https://ipython.org/)为我们的 PDB 调试环境：    
-    ```bash
-    $ pipenv run pytest src/chapter-2/test_pdb.py --pdbcls=IPython.terminal.debugger:TerminalPdb --pdb
-    ================================ test session starts =================================
-    platform darwin -- Python 3.8.4, pytest-6.1.1, py-1.9.0, pluggy-0.13.1
-    rootdir: /Users/yaomeng/Private/projects/pytest-chinese-doc
-    collected 1 item
-    
+我们可以通过`--pdbcls=IPython.terminal.debugger:TerminalPdb`选项指定[ipython](https://ipython.org/)为我们的 PDB 调试环境：  
+ ```bash
+$ pipenv run pytest src/chapter-2/test_pdb.py --pdbcls=IPython.terminal.debugger:TerminalPdb --pdb
+================================ test session starts =================================
+platform darwin -- Python 3.8.4, pytest-6.1.1, py-1.9.0, pluggy-0.13.1
+rootdir: /Users/yaomeng/Private/projects/pytest-chinese-doc
+collected 1 item
+
     src/chapter-2/test_pdb.py F
     >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> traceback >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-    
+
       def test_pdb():
           x = 0
     >       assert x
     E       assert 0
-    
+
     src/chapter-2/test_pdb.py:3: AssertionError
     >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> entering PDB >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-    
+
     >>>>>>>>>>>>>>>>>>>>> PDB post_mortem (IO-capturing turned off) >>>>>>>>>>>>>>>>>>>>>>
     > /Users/yaomeng/Private/projects/pytest-chinese-doc/src/chapter-2/test_pdb.py(3)test_pdb()
         1 def test_pdb():
         2     x = 0
     ----> 3     assert x
-    
+
     ipdb> import sys
     ipdb> sys.last_type
     <class 'AssertionError'>
@@ -466,7 +463,7 @@ python 3.7 开始新加了一个内置`breakpoint()`函数。pytest 支持以下
 ## 分析测试执行时长
 
 !!! attention
-	pytest 6.0  版本开始使用新的行为
+pytest 6.0 版本开始使用新的行为
 
 列出执行时间超过1秒，最慢的10个测试用例：
 
@@ -479,7 +476,7 @@ $ pytest --durations=10 --durations-min=1.0
 ## 错误句柄
 
 !!! attention
-	pytest 5.0 版本新增特性
+pytest 5.0 版本新增特性
 
 在测试执行中发生段错误或者超时的情况下，`faulthandler`标准模块可以转储`python`的回溯信息。
 
@@ -497,7 +494,7 @@ faulthandler_timeout=5
 我们有如下测试用例：
 
 ```python
-# src/chapter-2/test_fault_handler.py 
+# src/chapter-2/test_fault_handler.py
 
 import time
 
@@ -506,7 +503,7 @@ def test_faulthandler():
     time.sleep(7)
 ```
 
- 执行测试用例：
+执行测试用例：
 
 ```bash
 $ pipenv run pytest -q src/chapter-2/test_faulthandler.py
@@ -573,10 +570,7 @@ pipenv run pytest -q src/chapter-2/test_faulthandler.py -p no:faulthandler
 可以看到，超时并不会触发回溯信息的打印。不过我们会得到一个告警，因为我们关闭了`faulthandler`插件，那么它定义的`faulthandler_timeout`配置将无法识别。
 
 !!! note
-	这个功能是从[pytest-faulthandler](https://github.com/pytest-dev/pytest-faulthandler)插件合并而来的，但是有两点不同：
-	
-	- 去使能时，使用`-p no:faulthandler`代替原来的`--no-faulthandler`;
-	- 使用`faulthandler_timeout`配置项代替`--faulthandler-timeout`命令行选项来配置超时时间。当然，你也可以使用`-o faulthandler_timeout=X`在命令行配置；
+这个功能是从[pytest-faulthandler](https://github.com/pytest-dev/pytest-faulthandler)插件合并而来的，但是有两点不同：- 去使能时，使用`-p no:faulthandler`代替原来的`--no-faulthandler`; - 使用`faulthandler_timeout`配置项代替`--faulthandler-timeout`命令行选项来配置超时时间。当然，你也可以使用`-o faulthandler_timeout=X`在命令行配置；
 
 ## 创建`JUnitXML`格式的测试报告
 
@@ -596,7 +590,7 @@ junit_suite_name = pytest_chinese_doc
 ```
 
 !!! Attention
-	`junit_suite_name`是 pytest 4.0 版本新增的配置项；
+`junit_suite_name`是 pytest 4.0 版本新增的配置项；
 
 我们先来执行一个测试用例`test_nodeid.py::test_one`看看效果：
 
@@ -636,120 +630,121 @@ junit_duration_report = call
 
 我们有两种方式实现这个功能：
 
-- 使用`record_property`  fixture：
+- 使用`record_property` fixture：
 
-    例如：为`test_xml_report::test_record_property`用例添加一个额外的`test_id`信息：
+  例如：为`test_xml_report::test_record_property`用例添加一个额外的`test_id`信息：
 
-    ```python
-    # src/chapter-2/test_xml_report.py
-    
-    def test_record_property(record_property):
-        record_property("test_id", 10010)
-    ```
+  ```python
+  # src/chapter-2/test_xml_report.py
 
-    在`XML`文件中的表现为：`<property name="test_id" value="10010"/>`。
+  def test_record_property(record_property):
+      record_property("test_id", 10010)
+  ```
 
-    ```xml
-    <!-- src/chapter-2/report/test_record_property.xml -->
-    
-    <?xml version="1.0" encoding="utf-8"?>
-    
-    <testsuites>
-      <testsuite name="pytest_chinese_doc" errors="0" failures="0" skipped="0" tests="1" time="0.021" timestamp="2020-10-06T11:10:59.021407" hostname="yaomengdeMacBook-Air.local">
-        <testcase classname="test_xml_report" name="test_record_property" time="0.000">
-          <properties>
-            <property name="test_id" value="10010"/>
-          </properties>
-        </testcase>
-      </testsuite>
-    </testsuites>
-    ```
+  在`XML`文件中的表现为：`<property name="test_id" value="10010"/>`。
+
+  ```xml
+  <!-- src/chapter-2/report/test_record_property.xml -->
+
+  <?xml version="1.0" encoding="utf-8"?>
+
+  <testsuites>
+    <testsuite name="pytest_chinese_doc" errors="0" failures="0" skipped="0" tests="1" time="0.021" timestamp="2020-10-06T11:10:59.021407" hostname="yaomengdeMacBook-Air.local">
+      <testcase classname="test_xml_report" name="test_record_property" time="0.000">
+        <properties>
+          <property name="test_id" value="10010"/>
+        </properties>
+      </testcase>
+    </testsuite>
+  </testsuites>
+  ```
 
 - 新增一个自定义的标记`@pytest.mark.test_id()`:
 
-    首先，在`conftest.py`文件中重载`pytest_collection_modifyitems`钩子方法，添加对`test_id`标记的支持：
+  首先，在`conftest.py`文件中重载`pytest_collection_modifyitems`钩子方法，添加对`test_id`标记的支持：
 
-    ```python
-    # src/chapter-2/conftest.py
-    
-    def pytest_collection_modifyitems(items):
-        for item in items:
-            for marker in item.iter_markers(name="test_id"):
-                test_id = marker.args[0]
-                item.user_properties.append(("test_id", test_id))
-    ```
+  ```python
+  # src/chapter-2/conftest.py
 
-    然后，为测试用例添加新标记：
+  def pytest_collection_modifyitems(items):
+      for item in items:
+          for marker in item.iter_markers(name="test_id"):
+              test_id = marker.args[0]
+              item.user_properties.append(("test_id", test_id))
+  ```
 
-    ```python
-    # src/chapter-2/test_xml_report.py
-    
-    import pytest
-    
-    
-    @pytest.mark.test_id(10086)
-    def test_marker_test_id():
-        pass
-    ```
+  然后，为测试用例添加新标记：
 
-    在`XML`文件中的表现也为：`<property name="test_id" value="10086"/>`。
+  ```python
+  # src/chapter-2/test_xml_report.py
 
-    ```xml
-    <?xml version="1.0" encoding="utf-8"?>
-    
-    <testsuites>
-      <testsuite name="pytest_chinese_doc" errors="0" failures="0" skipped="0" tests="2" time="0.025" timestamp="2020-10-06T11:23:30.388331" hostname="yaomengdeMacBook-Air.local">
-        <testcase classname="test_xml_report" name="test_marker_test_id" time="0.000">
-          <properties>
-            <property name="test_id" value="10086"/>
-          </properties>
-        </testcase>
-        <testcase classname="test_xml_report" name="test_record_property" time="0.000">
-          <properties>
-            <property name="test_id" value="10010"/>
-          </properties>
-        </testcase>
-      </testsuite>
-    </testsuites>
-    ```
+  import pytest
 
-    !!! warning
-    	这时我们会得到一个告警：
-	
-    	```bash
-		
-    	PytestUnknownMarkWarning: Unknown pytest.mark.test_id - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/mark.html
-    		@pytest.mark.test_id(10010)
-    	```
-    	这是因为我们没有在pytest中注册test_id标记，但不影响正常的执行；
-		
-    	如果你想去除这个告警，只需要在配置文件中注册这个标记：
-    	```ini
-    	[pytest]
-    	markers =
-    		test_id: 为测试用例添加ID
-    	```
-    
+
+  @pytest.mark.test_id(10086)
+  def test_marker_test_id():
+      pass
+  ```
+
+  在`XML`文件中的表现也为：`<property name="test_id" value="10086"/>`。
+
+  ```xml
+  <?xml version="1.0" encoding="utf-8"?>
+
+  <testsuites>
+    <testsuite name="pytest_chinese_doc" errors="0" failures="0" skipped="0" tests="2" time="0.025" timestamp="2020-10-06T11:23:30.388331" hostname="yaomengdeMacBook-Air.local">
+      <testcase classname="test_xml_report" name="test_marker_test_id" time="0.000">
+        <properties>
+          <property name="test_id" value="10086"/>
+        </properties>
+      </testcase>
+      <testcase classname="test_xml_report" name="test_record_property" time="0.000">
+        <properties>
+          <property name="test_id" value="10010"/>
+        </properties>
+      </testcase>
+    </testsuite>
+  </testsuites>
+  ```
+
+  !!! warning
+  这时我们会得到一个告警：
+
+  ````bash
+
+  	PytestUnknownMarkWarning: Unknown pytest.mark.test_id - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/mark.html
+  		@pytest.mark.test_id(10010)
+  	```
+  	这是因为我们没有在pytest中注册test_id标记，但不影响正常的执行；
+
+  	如果你想去除这个告警，只需要在配置文件中注册这个标记：
+  	```ini
+  	[pytest]
+  	markers =
+  		test_id: 为测试用例添加ID
+  	```
+
+  ````
 
 !!! important
-    从 pytest 6.0 版本开始，`--junit_family`命令行选项的默认值改成`xunit2`，这是对旧的`xunit1`格式的一种更新，默认情况下，操作此类文件的工具（Jenkins、Azure Pipelines等）均支持该格式。
+从 pytest 6.0 版本开始，`--junit_family`命令行选项的默认值改成`xunit2`，这是对旧的`xunit1`格式的一种更新，默认情况下，操作此类文件的工具（Jenkins、Azure Pipelines等）均支持该格式。
 
     使用`xunit2`格式，只需要更新你的配置文件：
-    
+
     ```ini
     [pytest]
     junit_family=xunit2
     ```
-    
+
     如果你所使用的工具并不支持这种新格式，你也可以继续使用之前的格式：
-    
+
     ```ini
     [pytest]
     junit_family=legacy
     ```
-    
+
     目前已知的支持`xunit2`格式的工具有：
-    
+
     - [Jenkins](https://www.jenkins.io/) 并结合 [JUnit](https://plugins.jenkins.io/junit) 插件；
     - [Azure Pipelines](https://azure.microsoft.com/en-us/services/devops/pipelines)；
 
@@ -782,13 +777,12 @@ def test_record_xml_attribute(record_xml_attribute):
 ```
 
 !!! warning
-		`record_xml_attribute`目前是一个实验性的功能，未来可能被更强大的 API 所替代，但功能本身会被保留。
-
+`record_xml_attribute`目前是一个实验性的功能，未来可能被更强大的 API 所替代，但功能本身会被保留。
 
 ## 在`XML`报告中为测试集附加额外的子节点信息
 
 !!! attention
-		pytest 4.5 版本新增功能
+pytest 4.5 版本新增功能
 
 可以通过自定义一个`session`作用域级别的 fixture，为测试集添加子节点信息，并且会作用于所有的测试用例；
 
@@ -827,7 +821,7 @@ def test_testsuite_property(log_global_env_facts):
 </testsuites>
 ```
 
-这样生成的 XML 文件是符合最新的`xunit2`标准的，这点和`record_property`、`record_xml_attribute`正好相反。如果`junit_family=xunit2`，它们会触发告警：*PytestWarning: record_xml_attribute is incompatible with junit_family 'xunit2' (use 'legacy' or 'xunit1')*，而`record_testsuite_property`不会。
+这样生成的 XML 文件是符合最新的`xunit2`标准的，这点和`record_property`、`record_xml_attribute`正好相反。如果`junit_family=xunit2`，它们会触发告警：_PytestWarning: record_xml_attribute is incompatible with junit_family 'xunit2' (use 'legacy' or 'xunit1')_，而`record_testsuite_property`不会。
 
 ## 为测试报告提供`URL`链接 -- `pastebin`服务
 
@@ -835,17 +829,17 @@ def test_testsuite_property(log_global_env_facts):
 
 - 为每一个失败的测试用例创建一个URL
 
-    ```bash
-    pytest --pastebin=failed
-    ```
+  ```bash
+  pytest --pastebin=failed
+  ```
 
-    也可以通过添加`-x`选项，只为第一个失败的测试用例创建一个URL；
+  也可以通过添加`-x`选项，只为第一个失败的测试用例创建一个URL；
 
 - 为所有的测试用例创建一个URL
 
-    ```bash
-    pytest --pastebin=all
-    ```
+  ```bash
+  pytest --pastebin=all
+  ```
 
 ## 尽早的加载插件
 
@@ -861,9 +855,9 @@ pytest -p mypluginmodule
 
 - 一个公共插件的名称，这是其注册时在`setuptools`中赋予的名字，例如：尽早的加`pytest-cov`插件：
 
-    ```bash
-    pytest -p pytest_cov
-    ```
+  ```bash
+  pytest -p pytest_cov
+  ```
 
 ## 去使能插件
 
@@ -885,59 +879,59 @@ pytest.main()
 
 - 不会触发`SystemExit`，而是返回[exitcode](#_2)：
 
-    ```python
-    # src/chapter-2/test_via_main.py
-    
-    import time
-    
-    
-    def test_one():
-        time.sleep(10)
-    
-    
-    if __name__ == "__main__":
-        import pytest
-    
-        ret = pytest.main(["-q", __file__])
-        print(
-            "pytest.main() 返回 pytest.ExitCode.INTERRUPTED：",
-            ret == pytest.ExitCode.INTERRUPTED,
-        )
-    ```
+  ```python
+  # src/chapter-2/test_via_main.py
 
-    用例中有等待10秒的操作，在这期间，打断执行（`Ctr+C`），`pytest.main()`返回的是`INTERRUPTED`状态码；
+  import time
 
-    ```bash
-    pipenv run python src/chapter-2/test_via_main.py
-    ^C
-    !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! KeyboardInterrupt !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    /Users/yaomeng/Private/projects/pytest-chinese-doc/src/chapter-2/test_via_main.py:5: KeyboardInterrupt
-    (to show a full traceback on KeyboardInterrupt use --full-trace)
-    no tests ran in 1.38s
-    pytest.main() 返回 pytest.ExitCode.INTERRUPTED： True
-    ```
+
+  def test_one():
+      time.sleep(10)
+
+
+  if __name__ == "__main__":
+      import pytest
+
+      ret = pytest.main(["-q", __file__])
+      print(
+          "pytest.main() 返回 pytest.ExitCode.INTERRUPTED：",
+          ret == pytest.ExitCode.INTERRUPTED,
+      )
+  ```
+
+  用例中有等待10秒的操作，在这期间，打断执行（`Ctr+C`），`pytest.main()`返回的是`INTERRUPTED`状态码；
+
+  ```bash
+  pipenv run python src/chapter-2/test_via_main.py
+  ^C
+  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! KeyboardInterrupt !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  /Users/yaomeng/Private/projects/pytest-chinese-doc/src/chapter-2/test_via_main.py:5: KeyboardInterrupt
+  (to show a full traceback on KeyboardInterrupt use --full-trace)
+  no tests ran in 1.38s
+  pytest.main() 返回 pytest.ExitCode.INTERRUPTED： True
+  ```
 
 - 传递选项和参数：
 
-    ```bash
-    pytest.main(["-x", "mytestdir"])
-    ```
+  ```bash
+  pytest.main(["-x", "mytestdir"])
+  ```
 
 - 指定一个插件：
 
-    ```python
-    import pytest
-    
-    
-    class MyPlugin:
-        def pytest_sessionfinish(self):
-            print("*** test run reporting finishing")
-    
-    
-    pytest.main(["-qq"], plugins=[MyPlugin()])
-    ```
+  ```python
+  import pytest
+
+
+  class MyPlugin:
+      def pytest_sessionfinish(self):
+          print("*** test run reporting finishing")
+
+
+  pytest.main(["-qq"], plugins=[MyPlugin()])
+  ```
 
 !!! note
-		调用`pytest.main()`会引入你的测试文件以及其引用的所有模块。由于 python 引入机制的缓存特性，当这些文件发生变化时，后续再调用`pytest.main()`（在同一个程序执行过程中）时，并不会响应这些文件的变化。
+调用`pytest.main()`会引入你的测试文件以及其引用的所有模块。由于 python 引入机制的缓存特性，当这些文件发生变化时，后续再调用`pytest.main()`（在同一个程序执行过程中）时，并不会响应这些文件的变化。
 
-		基于这个原因，我们不推荐在同一个程序中多次调用`pytest.main()`（例如：为了重新执行测试；如果你确实有这个需求，或许可以考虑[pytest-repeat](https://pypi.org/project/pytest-repeat/)插件）；
+    	基于这个原因，我们不推荐在同一个程序中多次调用`pytest.main()`（例如：为了重新执行测试；如果你确实有这个需求，或许可以考虑[pytest-repeat](https://pypi.org/project/pytest-repeat/)插件）；

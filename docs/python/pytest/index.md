@@ -21,10 +21,6 @@
 
 ## 其它获取途径
 
-- 关注微信公众号【小鹿的先森】，回复【pytest】：
-
-    ![wechat](img/wechat.jpg)
-
 - 博客园：<https://www.cnblogs.com/luizyao/p/11771740.html>
 
 ## 主要新加及修订的内容（v5.1.3 -> v6.1.1）
