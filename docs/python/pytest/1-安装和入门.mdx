@@ -29,7 +29,7 @@ pytest 是一个能够简化测试系统构建、方便测试规模扩展的框�
 
 ## 创建你的第一个测试用例
 
-创建一个名为`test_sample.py`文件，包含一个待测函数和一个测试函数：
+创建一个名为`test_sample.py`文件，包含一个被测函数和一个测试函数：
 
 ```python title="src/chapter-1/test_sample.py"
 def func(x):
@@ -87,7 +87,7 @@ def test_mytest():
         f()
 ```
 
-执行这个测试用例时，加上`-q/--quiet`选项可以精简测试结果的输出：
+执行这个测试用例时，加上`-q/--quiet`选项可以查看精简版的测试结果：
 
 ```bash
 $ pytest -q test_sysexit.py
@@ -144,12 +144,6 @@ FAILED test_class.py::TestClass::test_two - AssertionError: assert False
   <li>测试类的命名要符合`Test*`规则；</li>
   <li>
     测试类中不能有`__init__()`方法，否则 pytest 无法采集到其中的测试用例；
-    <ul>
-      <li>
-        PytestCollectionWarning: cannot collect test class 'TestClass' because
-        it has a __init__ constructor.
-      </li>
-    </ul>
   </li>
 </ul>
 :::
@@ -171,13 +165,13 @@ class TestClassDemoInstance:
         assert 0
 ```
 
-```bash
+```python
 $ pytest -q src/chapter-1/test_class_demo.py
 FF                                                                             [100%]
 ====================================== FAILURES ======================================
 ___________________________ TestClassDemoInstance.test_one ___________________________
 
-self = <test_class_demo.TestClassDemoInstance object at 0x10ea69ee0>
+self = <test_class_demo.TestClassDemoInstance object at 0x000001BE2B380640>>
 
     def test_one(self):
 >       assert 0
@@ -186,7 +180,7 @@ E       assert 0
 src/chapter-1/test_class_demo.py:3: AssertionError
 ___________________________ TestClassDemoInstance.test_two ___________________________
 
-self = <test_class_demo.TestClassDemoInstance object at 0x10ea5c7f0>
+self = <test_class_demo.TestClassDemoInstance object at 0x000001BE2B380760>>
 
     def test_two(self):
 >       assert 0
@@ -199,200 +193,47 @@ FAILED src/chapter-1/test_class_demo.py::TestClassDemoInstance::test_two - asser
 2 failed in 0.05s
 ```
 
-可以看到，这个例子中的两个测试用例拥有不同的类实例：`0x10ea69ee0`和`0x10ea5c7f0`。
+可以看到，这个例子中的两个测试用例拥有不同的类实例：`0x000001BE2B380640`和`0x000001BE2B380760>`。
 
 ## 申请一个唯一的临时目录
 
 pytest 提供一些内置的`fixtures`，用于请求一些系统的资源。例如，一个唯一的临时目录：
 
-```python title="src/chapter-1/test_tmpdir.py"
-def test_tempdir(tmpdir):
+```python title="src/chapter-1/test_tmp_path.py"
+def test_needsfiles(tmp_path):
     print(tmpdir)
     assert 0
 ```
 
-在这个例子中，在形参的位子列出`tempdir` fixture，pytest 会在每个用例执行之前创建一个唯一的临时目录。
+在这个例子中，在形参的位子列出`tmp_path fixture`，`pytest` 会在每个用例执行之前创建一个唯一的临时目录。
 
 现在，我们来执行这个测试用例：
 
-```bash
-$ pipenv run pytest -q src/chapter-1/test_tempdir.py
-F                                                                              [100%]
-====================================== FAILURES ======================================
-____________________________________ test_tempdir ____________________________________
+```python
+$ pytest -q test_tmp_path.py
+F                                                                    [100%]
+================================= FAILURES =================================
+_____________________________ test_needsfiles ______________________________
 
-tmpdir = local('/private/var/folders/7r/2gv2hwyx6bj_wz30cb9r9b5r0000gn/T/pytest-of-yaomeng/pytest-0/test_tempdir0')
+tmp_path = PosixPath('PYTEST_TMPDIR/test_needsfiles0')
 
-    def test_tempdir(tmpdir):
-        print(tmpdir)
+    def test_needsfiles(tmp_path):
+        print(tmp_path)
 >       assert 0
 E       assert 0
 
-src/chapter-1/test_tempdir.py:3: AssertionError
--------------------------------- Captured stdout call --------------------------------
-/private/var/folders/7r/2gv2hwyx6bj_wz30cb9r9b5r0000gn/T/pytest-of-yaomeng/pytest-0/test_tempdir0
-============================== short test summary info ===============================
-FAILED src/chapter-1/test_tempdir.py::test_tempdir - assert 0
-1 failed in 0.04s
+test_tmp_path.py:3: AssertionError
+--------------------------- Captured stdout call ---------------------------
+PYTEST_TMPDIR/test_needsfiles0
+========================= short test summary info ==========================
+FAILED test_tmp_path.py::test_needsfiles - assert 0
+1 failed in 0.12s
 ```
+
+有关TMPDIR处理的更多信息，请访问[Temporary directories and files](https://docs.pytest.org/en/7.3.x/how-to/tmp_path.html#tmp-path-handling)。
 
 可以使用如下命令查看所有可用的 fixtures，如果想同时查看以`_`开头的 fixtures，需要添加`-v`选项：
 
 ```bash
-$ pipenv run pytest -v --fixtures
-================================ test session starts =================================
-platform darwin -- Python 3.8.4, pytest-6.1.1, py-1.9.0, pluggy-0.13.1 -- /Users/yaomeng/.local/share/virtualenvs/pytest-chinese-doc-DA9roatD/bin/python
-cachedir: .pytest_cache
-rootdir: /Users/yaomeng/Private/projects/pytest-chinese-doc
-collected 7 items
-cache -- ../../../.local/share/virtualenvs/pytest-chinese-doc-DA9roatD/lib/python3.8/site-packages/_pytest/cacheprovider.py:473
-    Return a cache object that can persist state between testing sessions.
-
-    cache.get(key, default)
-    cache.set(key, value)
-
-    Keys must be a ``/`` separated value, where the first part is usually the
-    name of your plugin or application to avoid clashes with other cache users.
-
-    Values can be any object handled by the json stdlib module.
-
-capsys -- ../../../.local/share/virtualenvs/pytest-chinese-doc-DA9roatD/lib/python3.8/site-packages/_pytest/capture.py:843
-    Enable text capturing of writes to ``sys.stdout`` and ``sys.stderr``.
-
-    The captured output is made available via ``capsys.readouterr()`` method
-    calls, which return a ``(out, err)`` namedtuple.
-    ``out`` and ``err`` will be ``text`` objects.
-
-capsysbinary -- ../../../.local/share/virtualenvs/pytest-chinese-doc-DA9roatD/lib/python3.8/site-packages/_pytest/capture.py:860
-    Enable bytes capturing of writes to ``sys.stdout`` and ``sys.stderr``.
-
-    The captured output is made available via ``capsysbinary.readouterr()``
-    method calls, which return a ``(out, err)`` namedtuple.
-    ``out`` and ``err`` will be ``bytes`` objects.
-
-capfd -- ../../../.local/share/virtualenvs/pytest-chinese-doc-DA9roatD/lib/python3.8/site-packages/_pytest/capture.py:877
-    Enable text capturing of writes to file descriptors ``1`` and ``2``.
-
-    The captured output is made available via ``capfd.readouterr()`` method
-    calls, which return a ``(out, err)`` namedtuple.
-    ``out`` and ``err`` will be ``text`` objects.
-
-capfdbinary -- ../../../.local/share/virtualenvs/pytest-chinese-doc-DA9roatD/lib/python3.8/site-packages/_pytest/capture.py:894
-    Enable bytes capturing of writes to file descriptors ``1`` and ``2``.
-
-    The captured output is made available via ``capfd.readouterr()`` method
-    calls, which return a ``(out, err)`` namedtuple.
-    ``out`` and ``err`` will be ``byte`` objects.
-
-doctest_namespace [session scope] -- ../../../.local/share/virtualenvs/pytest-chinese-doc-DA9roatD/lib/python3.8/site-packages/_pytest/doctest.py:738
-    Fixture that returns a :py:class:`dict` that will be injected into the namespace of doctests.
-
-pytestconfig [session scope] -- ../../../.local/share/virtualenvs/pytest-chinese-doc-DA9roatD/lib/python3.8/site-packages/_pytest/fixtures.py:1398
-    Session-scoped fixture that returns the :class:`_pytest.config.Config` object.
-
-    Example::
-
-        def test_foo(pytestconfig):
-            if pytestconfig.getoption("verbose") > 0:
-                ...
-
-record_property -- ../../../.local/share/virtualenvs/pytest-chinese-doc-DA9roatD/lib/python3.8/site-packages/_pytest/junitxml.py:305
-    Add extra properties to the calling test.
-
-    User properties become part of the test report and are available to the
-    configured reporters, like JUnit XML.
-
-    The fixture is callable with ``name, value``. The value is automatically
-    XML-encoded.
-
-    Example::
-
-        def test_function(record_property):
-            record_property("example_key", 1)
-
-record_xml_attribute -- ../../../.local/share/virtualenvs/pytest-chinese-doc-DA9roatD/lib/python3.8/site-packages/_pytest/junitxml.py:328
-    Add extra xml attributes to the tag for the calling test.
-
-    The fixture is callable with ``name, value``. The value is
-    automatically XML-encoded.
-
-record_testsuite_property [session scope] -- ../../../.local/share/virtualenvs/pytest-chinese-doc-DA9roatD/lib/python3.8/site-packages/_pytest/junitxml.py:366
-    Records a new ``<property>`` tag as child of the root ``<testsuite>``. This is suitable to
-    writing global information regarding the entire test suite, and is compatible with ``xunit2`` JUnit family.
-
-    This is a ``session``-scoped fixture which is called with ``(name, value)``. Example:
-
-    .. code-block:: python
-
-        def test_foo(record_testsuite_property):
-            record_testsuite_property("ARCH", "PPC")
-            record_testsuite_property("STORAGE_TYPE", "CEPH")
-
-    ``name`` must be a string, ``value`` will be converted to a string and properly xml-escaped.
-
-caplog -- ../../../.local/share/virtualenvs/pytest-chinese-doc-DA9roatD/lib/python3.8/site-packages/_pytest/logging.py:467
-    Access and control log capturing.
-
-    Captured logs are available through the following properties/methods::
-
-    * caplog.messages        -> list of format-interpolated log messages
-    * caplog.text            -> string containing formatted log output
-    * caplog.records         -> list of logging.LogRecord instances
-    * caplog.record_tuples   -> list of (logger_name, level, message) tuples
-    * caplog.clear()         -> clear captured records and formatted log output string
-
-monkeypatch -- ../../../.local/share/virtualenvs/pytest-chinese-doc-DA9roatD/lib/python3.8/site-packages/_pytest/monkeypatch.py:29
-    The returned ``monkeypatch`` fixture provides these
-    helper methods to modify objects, dictionaries or os.environ::
-
-        monkeypatch.setattr(obj, name, value, raising=True)
-        monkeypatch.delattr(obj, name, raising=True)
-        monkeypatch.setitem(mapping, name, value)
-        monkeypatch.delitem(obj, name, raising=True)
-        monkeypatch.setenv(name, value, prepend=False)
-        monkeypatch.delenv(name, raising=True)
-        monkeypatch.syspath_prepend(path)
-        monkeypatch.chdir(path)
-
-    All modifications will be undone after the requesting
-    test function or fixture has finished. The ``raising``
-    parameter determines if a KeyError or AttributeError
-    will be raised if the set/deletion operation has no target.
-
-recwarn -- ../../../.local/share/virtualenvs/pytest-chinese-doc-DA9roatD/lib/python3.8/site-packages/_pytest/recwarn.py:29
-    Return a :class:`WarningsRecorder` instance that records all warnings emitted by test functions.
-
-    See http://docs.python.org/library/warnings.html for information
-    on warning categories.
-
-tmpdir_factory [session scope] -- ../../../.local/share/virtualenvs/pytest-chinese-doc-DA9roatD/lib/python3.8/site-packages/_pytest/tmpdir.py:155
-    Return a :class:`_pytest.tmpdir.TempdirFactory` instance for the test session.
-
-
-tmp_path_factory [session scope] -- ../../../.local/share/virtualenvs/pytest-chinese-doc-DA9roatD/lib/python3.8/site-packages/_pytest/tmpdir.py:163
-    Return a :class:`_pytest.tmpdir.TempPathFactory` instance for the test session.
-
-
-tmpdir -- ../../../.local/share/virtualenvs/pytest-chinese-doc-DA9roatD/lib/python3.8/site-packages/_pytest/tmpdir.py:179
-    Return a temporary directory path object
-    which is unique to each test function invocation,
-    created as a sub directory of the base temporary
-    directory.  The returned object is a `py.path.local`_
-    path object.
-
-    .. _`py.path.local`: https://py.readthedocs.io/en/latest/path.html
-
-tmp_path -- ../../../.local/share/virtualenvs/pytest-chinese-doc-DA9roatD/lib/python3.8/site-packages/_pytest/tmpdir.py:192
-    Return a temporary directory path object
-    which is unique to each test function invocation,
-    created as a sub directory of the base temporary
-    directory.  The returned object is a :class:`pathlib.Path`
-    object.
-
-    .. note::
-
-        in python < 3.6 this is a pathlib2.Path
-
-
-=============================== no tests ran in 0.05s ================================
+$ pytest -v --fixtures # shows builtin and custom fixtures
 ```
