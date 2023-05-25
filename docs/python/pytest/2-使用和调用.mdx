@@ -10,17 +10,18 @@ python -m pytest [...]
 
 不过这会将当前路径加入到`sys.path`中，除此之外它与`pytest [...]`的效果一样。
 
-!!! note
+:::note
 `python -m mod`表示将模块（`mod`）作为脚本来运行，但是模块中必须包含一个[`__main__.py`](https://docs.python.org/3/library/__main__.html)文件。
+:::
 pytest 的`__main__.py`文件内容如下：
 
-    ```python
-    """The pytest entry point."""
-    import pytest
+```python
+"""The pytest entry point."""
+import pytest
 
-    if __name__ == "__main__":
-    raise SystemExit(pytest.console_main())
-    ```
+if __name__ == "__main__":
+raise SystemExit(pytest.console_main())
+```
 
 ## 测试结束时可能返回的状态码
 
@@ -423,42 +424,43 @@ python 3.7 开始新加了一个内置`breakpoint()`函数。pytest 支持以下
 - `--pdbcls`选项允许指定一个用户自定义的`PDB`类；
 
 !!! note
-我们可以通过`--pdbcls=IPython.terminal.debugger:TerminalPdb`选项指定[ipython](https://ipython.org/)为我们的 PDB 调试环境：  
- ```bash
+我们可以通过`--pdbcls=IPython.terminal.debugger:TerminalPdb`选项指定[ipython](https://ipython.org/)为我们的 PDB 调试环境：
+
+````bash
 $ pipenv run pytest src/chapter-2/test_pdb.py --pdbcls=IPython.terminal.debugger:TerminalPdb --pdb
 ================================ test session starts =================================
 platform darwin -- Python 3.8.4, pytest-6.1.1, py-1.9.0, pluggy-0.13.1
 rootdir: /Users/yaomeng/Private/projects/pytest-chinese-doc
 collected 1 item
 
-    src/chapter-2/test_pdb.py F
-    >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> traceback >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+   src/chapter-2/test_pdb.py F
+   >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> traceback >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
-      def test_pdb():
-          x = 0
-    >       assert x
-    E       assert 0
+     def test_pdb():
+         x = 0
+   >       assert x
+   E       assert 0
 
-    src/chapter-2/test_pdb.py:3: AssertionError
-    >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> entering PDB >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+   src/chapter-2/test_pdb.py:3: AssertionError
+   >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> entering PDB >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
-    >>>>>>>>>>>>>>>>>>>>> PDB post_mortem (IO-capturing turned off) >>>>>>>>>>>>>>>>>>>>>>
-    > /Users/yaomeng/Private/projects/pytest-chinese-doc/src/chapter-2/test_pdb.py(3)test_pdb()
-        1 def test_pdb():
-        2     x = 0
-    ----> 3     assert x
+   >>>>>>>>>>>>>>>>>>>>> PDB post_mortem (IO-capturing turned off) >>>>>>>>>>>>>>>>>>>>>>
+   > /Users/yaomeng/Private/projects/pytest-chinese-doc/src/chapter-2/test_pdb.py(3)test_pdb()
+       1 def test_pdb():
+       2     x = 0
+   ----> 3     assert x
 
-    ipdb> import sys
-    ipdb> sys.last_type
-    <class 'AssertionError'>
-    ipdb> exit
+   ipdb> import sys
+   ipdb> sys.last_type
+   <class 'AssertionError'>
+   ipdb> exit
 
 
-    ============================== short test summary info ===============================
-    FAILED src/chapter-2/test_pdb.py::test_pdb - assert 0
-    !!!!!!!!!!!!!!!!!!!!!! _pytest.outcomes.Exit: Quitting debugger !!!!!!!!!!!!!!!!!!!!!!
-    ================================= 1 failed in 19.02s =================================
-    ```
+   ============================== short test summary info ===============================
+   FAILED src/chapter-2/test_pdb.py::test_pdb - assert 0
+   !!!!!!!!!!!!!!!!!!!!!! _pytest.outcomes.Exit: Quitting debugger !!!!!!!!!!!!!!!!!!!!!!
+   ================================= 1 failed in 19.02s =================================
+   ```
 
 ## 分析测试执行时长
 
@@ -469,7 +471,7 @@ pytest 6.0 版本开始使用新的行为
 
 ```bash
 $ pytest --durations=10 --durations-min=1.0
-```
+````
 
 默认情况下，pytest 不会列出执行时长小于`0.005`秒的测试用例，但是我们可以通过添加`-vv`选项来同时查看它们。
 
