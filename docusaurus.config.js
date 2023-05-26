@@ -94,6 +94,11 @@ const config = {
         additionalLanguages: ['java', 'groovy', 'python'],
       },
     }),
+
+  markdown: {
+    mermaid: true,
+  },
+  themes: ['@docusaurus/theme-mermaid'],
 };
 
 module.exports = config;
