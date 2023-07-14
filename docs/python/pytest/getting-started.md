@@ -2,26 +2,31 @@
 title: 安装和入门
 ---
 
-> **PYPI包名称**: [pytest](https://pypi.org/project/pytest/)  
-> **英文原文链接**：https://docs.pytest.org/en/7.3.x/  
-> **英文PDF最新文档**：[download latest](https://buildmedia.readthedocs.org/media/pdf/pytest/latest/pytest.pdf)
+**英文原文链接**：https://docs.pytest.org/en/7.3.x/  
+此翻译参考：
+  * https://www.cnblogs.com/superhin/p/11677240.html
+  * https://github.com/luizyao/pytest-chinese-doc
 
 # 安装和入门
-pytest 是一个能够简化测试系统构建、方便测试规模扩展的框架，它让测试变得更具表现力和可读性。只需要几分钟的时间，你就可以开始一个简单的单元测试或者复杂的功能测试。
+**Python支持版本**: Python 3.7+ or PyPy3  
+**支持的平台**: Unix/Posix and Windows  
+**PyPI包名**: [pytest](https://pypi.org/project/pytest/)   
+**依赖项**: py,colorama (Windows)  
+**PDF文档**: [download latest](https://buildmedia.readthedocs.org/media/pdf/pytest/latest/pytest.pdf)
 
-## 安装 pytest
-`pytest` requires: Python 3.7+ or PyPy3.
+`pytest`是一个使创建简单及可扩展性测试用例变得非常方便的框架。测试用例清晰、易读而无需大量的繁琐代码。只需要几分钟的时间，就可以对你的应用开始一个简单的单元测试或者复杂的功能测试。
 
-1. 在命令行执行以下命令：
-   ```bash
-   $ pip install -U pytest
-   ```
+## 安装`pytest`
+在命令行执行以下命令：
+```bash
+pip install -U pytest
+```
 
-2. 检查版本：
-   ```bash
-   $ pytest --version
-   pytest 7.3.1
-   ```
+检查版本：
+```bash
+$ pytest --version
+pytest 7.3.1
+```
 
 ## 创建你的第一个测试用例
 创建一个名为`test_sample.py`文件，包含一个被测函数和一个测试函数：
